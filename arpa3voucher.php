@@ -16,7 +16,6 @@ class arpa3voucher extends Module
         $this->tab = 'administration';
         $this->version = '1.0.2';
         $this->author = 'Arpa3';
-        $this->need_instance = 0;
 
         /**
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
