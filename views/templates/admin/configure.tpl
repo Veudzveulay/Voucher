@@ -27,7 +27,7 @@
 <a href="https://www.arpa3.fr/" target="_blank"><span id="entete"></span></a>
 </div>
 <div class="panel">
-	<form class="form" action="{Tools::safeOutput($_SERVER['REQUEST_URI'])}" method="post" style="width:100%;display:inline-block">
+	<form class="form" action="{Tools::safeOutput($smarty.server.REQUEST_URI)}" method="post" style="width:100%;display:inline-block">
 		<div class="panel-heading"><h2>Gestion Promotions</h2></div>
 
 		<div class="row">
@@ -100,7 +100,7 @@
 			</thead>
 			{foreach from=$voucherList item=voucher}
 			<tr>
-				<form class="form" action="{Tools::safeOutput($_SERVER['REQUEST_URI'])}" method="post">
+				<form class="form" action="{Tools::safeOutput($smarty.server.REQUEST_URI)}" method="post">
 						<input type="hidden" name="id_arpa3voucher" value="{$voucher.id}" />
 					<td>
 						<input type="number" id="taux" class="form-control" name="taux" min="1" step="1" value="{$voucher.taux}" required>
@@ -118,8 +118,8 @@
 					<td>
 						<input type="date" id="date_from" class="form-control" name="date_from" value="{$voucher.date_from}" required>
 					</td>
-					<td>
-						<input type="date" id="date_to" class="form-control" name="date_to" value="{$voucher.date_to}">
+					<td {if strtotime($voucher.date_to) < strtotime('today')}class="date-error"{/if}>
+						<input type="date" id="date_to" class="form-control {if strtotime($voucher.date_to) < strtotime('today')}date-error"{/if}" name="date_to" value="{$voucher.date_to}">
 					</td>
 					<td>
 						<input type="submit" class="btn btn-primary btn-xs" style="border-radius: unset" name="update" value="Enregistrer" />

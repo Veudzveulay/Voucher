@@ -38,3 +38,7 @@
 .boldth {
     font-weight: bolder !important;
 }
+.bootstrap .table tbody>tr>td>input.date-error {
+    background-color: #ff0000; /* Couleur de fond pour indiquer une erreur de date */
+    color: #FFFFFF;
+}
