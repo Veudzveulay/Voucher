@@ -1,32 +1,31 @@
 <?php
 /**
-* 2007-2023 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2023 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
-
+ * 2007-2023 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2023 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
+ */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -35,7 +34,7 @@ class arpa3voucher extends Module
 {
     protected $config_form = false;
 
-    public $hook_lockers = array();
+    public $hook_lockers = [];
 
     public function __construct()
     {
@@ -45,7 +44,7 @@ class arpa3voucher extends Module
         $this->author = 'Arpa3';
         $this->need_instance = 0;
 
-        /**
+        /*
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
          */
         $this->bootstrap = true;
@@ -55,7 +54,7 @@ class arpa3voucher extends Module
         $this->displayName = $this->l('arpa3voucher');
         $this->description = $this->l('Promotions paniers Arpa3');
         $this->confirmUninstall = $this->l('Confirmer supression module ?');
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
 
         $this->registerHook('actionFrontControllerAfterInit');
     }
@@ -66,18 +65,20 @@ class arpa3voucher extends Module
      */
     public function install()
     {
-        include(dirname(__FILE__) . '/sql/install.php');
-        return parent::install() &&
-            $this->registerHook('header') &&
-            $this->registerHook('backOfficeHeader') &&
-            $this->registerHook('actionCartSave') &&
-            $this->registerHook('actionValidateOrder') &&
-            $this->registerHook('actionFrontControllerAfterInit');
+        include dirname(__FILE__) . '/sql/install.php';
+
+        return parent::install()
+            && $this->registerHook('header')
+            && $this->registerHook('backOfficeHeader')
+            && $this->registerHook('actionCartSave')
+            && $this->registerHook('actionValidateOrder')
+            && $this->registerHook('actionFrontControllerAfterInit');
     }
 
     public function uninstall()
     {
-        include(dirname(__FILE__) . '/sql/install.php');
+        include dirname(__FILE__) . '/sql/install.php';
+
         return parent::uninstall();
     }
 
@@ -98,6 +99,7 @@ class arpa3voucher extends Module
                 $myDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $voucher['date_to']);
                 $newDateString = $myDateTime->format('Y-m-d');
                 $voucher['date_to'] = $newDateString;
+
                 return $voucher;
             }, $voucherList);
         }
@@ -132,13 +134,13 @@ class arpa3voucher extends Module
             . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
-        $helper->tpl_vars = array(
+        $helper->tpl_vars = [
             'fields_value' => $this->getConfigFormValues(), /* Add values for your inputs */
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id,
-        );
+        ];
 
-        return $helper->generateForm(array($this->getConfigForm()));
+        return $helper->generateForm([$this->getConfigForm()]);
     }
 
     /**
@@ -146,51 +148,51 @@ class arpa3voucher extends Module
      */
     protected function getConfigForm()
     {
-        return array(
-            'form' => array(
-                'legend' => array(
+        return [
+            'form' => [
+                'legend' => [
                     'title' => $this->l('Settings'),
                     'icon' => 'icon-cogs',
-                ),
-                'input' => array(
-                    array(
+                ],
+                'input' => [
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Live mode'),
                         'name' => 'ARPA3VOUCHER_LIVE_MODE',
                         'is_bool' => true,
                         'desc' => $this->l('Use this module in live mode'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
                         'col' => 3,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-envelope"></i>',
                         'desc' => $this->l('Enter a valid email address'),
                         'name' => 'ARPA3VOUCHER_ACCOUNT_EMAIL',
                         'label' => $this->l('Email'),
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'password',
                         'name' => 'ARPA3VOUCHER_ACCOUNT_PASSWORD',
                         'label' => $this->l('Password'),
-                    ),
-                ),
-                'submit' => array(
+                    ],
+                ],
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -198,11 +200,11 @@ class arpa3voucher extends Module
      */
     protected function getConfigFormValues()
     {
-        return array(
+        return [
             'ARPA3VOUCHER_LIVE_MODE' => Configuration::get('ARPA3VOUCHER_LIVE_MODE', true),
             'ARPA3VOUCHER_ACCOUNT_EMAIL' => Configuration::get('ARPA3VOUCHER_ACCOUNT_EMAIL', 'contact@prestashop.com'),
             'ARPA3VOUCHER_ACCOUNT_PASSWORD' => Configuration::get('ARPA3VOUCHER_ACCOUNT_PASSWORD', null),
-        );
+        ];
     }
 
     /**
@@ -211,13 +213,13 @@ class arpa3voucher extends Module
     protected function postProcess()
     {
         if (Tools::isSubmit('create')) {
-            $product_id = (int)Tools::getValue('chooseproduct');
-            $product_gift_id = (int)Tools::getValue('choose-product-gift');
+            $product_id = (int) Tools::getValue('chooseproduct');
+            $product_gift_id = (int) Tools::getValue('choose-product-gift');
             $id_duplicate = $this->duplicateproduct($product_gift_id);
             $datefrom = Tools::getValue('date_from') . ' 00:00:00';
             $dateto = Tools::getValue('date_to') . ' 00:00:00';
-            $taux = (int)Tools::getValue('taux');
-            $product_gift_quantity = (int)Tools::getValue('product-gift-quantity');
+            $taux = (int) Tools::getValue('taux');
+            $product_gift_quantity = (int) Tools::getValue('product-gift-quantity');
 
             $res = Db::getInstance()->insert($this->name, [
                 'taux' => $taux,
@@ -230,13 +232,13 @@ class arpa3voucher extends Module
             ]);
 
             // Rafraichissement de la page
-            Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
+            Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
         }
 
         if (Tools::isSubmit('update')) {
-            $rowid = (int)Tools::getValue('id_arpa3voucher');
-            $taux = (int)Tools::getValue('taux');
-            $product_gift_quantity = (int)Tools::getValue('product-gift-quantity');
+            $rowid = (int) Tools::getValue('id_arpa3voucher');
+            $taux = (int) Tools::getValue('taux');
+            $product_gift_quantity = (int) Tools::getValue('product-gift-quantity');
 
             $datefrom = Tools::getValue('date_from');
             $dateto = Tools::getValue('date_to');
@@ -248,19 +250,19 @@ class arpa3voucher extends Module
             ];
 
             Db::getInstance()->update($this->name, $columns, 'id = ' . $rowid);
-            //Rafraichissement de la page
-            Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
+            // Rafraichissement de la page
+            Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
         }
         if (Tools::isSubmit('delete')) {
-            $rowid = (int)Tools::getValue('id_arpa3voucher');
-            $giftproduct = (int)Tools::getValue('giftid');
-            //Suppréssion du produit cadeau
+            $rowid = (int) Tools::getValue('id_arpa3voucher');
+            $giftproduct = (int) Tools::getValue('giftid');
+            // Suppréssion du produit cadeau
             $delete = new Product($giftproduct);
             $delete->delete();
-            //Suppréssion de la promotion
+            // Suppréssion de la promotion
             Db::getInstance()->executeS('DELETE FROM `' . _DB_PREFIX_ . 'arpa3voucher` where id=' . $rowid);
-            //Rafraichissement de la page
-            Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
+            // Rafraichissement de la page
+            Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
         }
     }
 
@@ -290,10 +292,9 @@ class arpa3voucher extends Module
         $cart = $params['cart'];
 
         Context::getContext()->cart = $cart;
-        Context::getContext()->currency = new Currency((int)$cart->id_currency);
+        Context::getContext()->currency = new Currency((int) $cart->id_currency);
 
         if (Context::getContext()->cart->id) {
-
             $configutation_promos = $this->getArpa3vouchers();
 
             // get fresh cart products [id_product => quantity]
@@ -309,10 +310,10 @@ class arpa3voucher extends Module
                         $now = date('Y-m-d H:i:s');
                         if ($now >= $configutation_promo['date_from']) {
                             // ajout du produit offert
-                            if (!in_array('add_' . $promo_name, $this->hook_lockers)) { //check verrou
+                            if (!in_array('add_' . $promo_name, $this->hook_lockers)) { // check verrou
                                 array_push($this->hook_lockers, 'add_' . $promo_name); // ajout verrou
 
-                                if(isset($cart_products[$configutation_promo['id_product_gift_virtual']])) {
+                                if (isset($cart_products[$configutation_promo['id_product_gift_virtual']])) {
                                     // retire le produit offert
                                     $cart->updateQty(
                                         $cart_products[$configutation_promo['id_product_gift_virtual']],
@@ -324,7 +325,6 @@ class arpa3voucher extends Module
                                 }
 
                                 if ($now <= $configutation_promo['date_to']) {
-
                                     // calcul quantité à ajouter en produit offert
                                     $quantite_produit_cible = $cart_products[$configutation_promo['id_product_cible']];
 
@@ -332,9 +332,9 @@ class arpa3voucher extends Module
                                     $cancible = StockAvailable::getQuantityAvailableByProduct($configutation_promo['id_product_cible']);
 
                                     // nombre de promo sur le produit
-                                    $quantite_promo = (int)($quantite_produit_cible / $configutation_promo['taux']);
+                                    $quantite_promo = (int) ($quantite_produit_cible / $configutation_promo['taux']);
                                     // quantité à ajouter au panier
-                                    $quantite_produit_offert = $quantite_promo * (int)($configutation_promo['product_gift_quantity']);
+                                    $quantite_produit_offert = $quantite_promo * (int) $configutation_promo['product_gift_quantity'];
 
                                     /*
                                 if ($cangift <= $quantite_produit_offert) {
@@ -388,24 +388,23 @@ class arpa3voucher extends Module
         $order = $params['order'];
         $cartorders = [];
         foreach ($order->product_list as $list) {
-            $cartorders[$list["id_product"]] = $list["quantity"];
+            $cartorders[$list['id_product']] = $list['quantity'];
         }
         $configutation_promos = $this->getArpa3vouchers();
 
         foreach ($configutation_promos as $promo_name => $configutation_promo) {
-
             if (array_key_exists($configutation_promo['id_product_gift_virtual'], $cartorders)) {
                 $cible = $cartorders[$configutation_promo['id_product_cible']];
                 $offert = $cartorders[$configutation_promo['id_product_gift_virtual']];
                 // On décrémente le stock des offert sur le produit cible.
-                StockAvailable::updateQuantity($configutation_promo['id_product_cible'], 0, -(int)$offert);
+                StockAvailable::updateQuantity($configutation_promo['id_product_cible'], 0, -(int) $offert);
             }
         }
     }
 
     public function productlist()
     {
-        $id_lang = (int)Context::getContext()->language->id;
+        $id_lang = (int) Context::getContext()->language->id;
         $start = 0;
         $limit = 10000;
         $order_by = 'id_product';
@@ -416,8 +415,8 @@ class arpa3voucher extends Module
         $array = [];
         $productslist = ProductCore::getProducts($id_lang, $start, $limit, $order_by, $order_way, $id_category, $only_active, $context);
         foreach ($productslist as $product) {
-            if ($product["visibility"] !== "none") {
-                $array[(int)$product["id_product"]] = $product["name"];
+            if ($product['visibility'] !== 'none') {
+                $array[(int) $product['id_product']] = $product['name'];
             }
         }
 
@@ -426,7 +425,7 @@ class arpa3voucher extends Module
 
     public function getArpa3vouchers()
     {
-        $now = date("Y-m-d");
+        $now = date('Y-m-d');
         $list = new DbQuery();
         $list->select('*');
         $list->from($this->name);
@@ -436,7 +435,7 @@ class arpa3voucher extends Module
 
     public function duplicateproduct($product_id)
     {
-        if (Validate::isLoadedObject($product = new Product((int)$product_id))) {
+        if (Validate::isLoadedObject($product = new Product((int) $product_id))) {
             $id_product_old = $product->id;
             if (empty($product->price) && Shop::getContext() == Shop::CONTEXT_GROUP) {
                 $shops = ShopGroup::getShopsFromGroup(Shop::getContextShopGroupID());
@@ -454,13 +453,13 @@ class arpa3voucher extends Module
             $languages = Language::getLanguages();
 
             foreach ($languages as $lang) {
-                $product->name[$lang['id_lang']] = $product->name[$lang['id_lang']] . " ( OFFERT )";
+                $product->name[$lang['id_lang']] = $product->name[$lang['id_lang']] . ' ( OFFERT )';
             }
 
             $product->indexed = 0;
             $product->active = 1;
             $product->price = 0;
-            $product->visibility = "none";
+            $product->visibility = 'none';
             if (
                 $product->add()
                 && Category::duplicateProductCategories($id_product_old, $product->id)
@@ -479,22 +478,23 @@ class arpa3voucher extends Module
                     Product::updateDefaultAttribute($product->id);
                 }
                 // Mise à jour des stocks a 100 000
-                StockAvailable::setQuantity((int)$product->id, 0, 100000, (int)Configuration::get('PS_SHOP_DEFAULT'));
+                StockAvailable::setQuantity((int) $product->id, 0, 100000, (int) Configuration::get('PS_SHOP_DEFAULT'));
                 // Mise à jour du nom produit
 
                 if (!Tools::getValue('noimage') && !Image::duplicateProductImages($id_product_old, $product->id, $combination_images)) {
-                    //$this->errors[] = $this->trans('An error occurred while copying the image.', array(), 'Admin.Notifications.Error');
+                    // $this->errors[] = $this->trans('An error occurred while copying the image.', array(), 'Admin.Notifications.Error');
                 } else {
-                    Hook::exec('actionProductAdd', array('id_product_old' => $id_product_old, 'id_product' => (int)$product->id, 'product' => $product));
-                    if (in_array($product->visibility, array('both', 'search')) && Configuration::get('PS_SEARCH_INDEXATION')) {
+                    Hook::exec('actionProductAdd', ['id_product_old' => $id_product_old, 'id_product' => (int) $product->id, 'product' => $product]);
+                    if (in_array($product->visibility, ['both', 'search']) && Configuration::get('PS_SEARCH_INDEXATION')) {
                         Search::indexation(false, $product->id);
                     }
-                    //$this->redirect_after = self::$currentIndex . (Tools::getIsset('id_category') ? '&id_category=' . (int) Tools::getValue('id_category') : '') . '&conf=19&token=' . $this->token;
+                    // $this->redirect_after = self::$currentIndex . (Tools::getIsset('id_category') ? '&id_category=' . (int) Tools::getValue('id_category') : '') . '&conf=19&token=' . $this->token;
                 }
             } else {
-                //$this->errors[] = $this->trans('An error occurred while creating an object.', array(), 'Admin.Notifications.Error');
+                // $this->errors[] = $this->trans('An error occurred while creating an object.', array(), 'Admin.Notifications.Error');
             }
         }
+
         return $product->id;
     }
 }
