@@ -70,11 +70,11 @@ class arpa3voucher extends Module
         include dirname(__FILE__) . '/sql/install.php';
 
         return parent::install()
-            && $this->registerHook('header')
+            && $this->registerHook('displayHeader')
             && $this->registerHook('backOfficeHeader')
             && $this->registerHook('actionCartSave')
             && $this->registerHook('actionValidateOrder')
-            && $this->registerHook('actionFrontControllerAfterInit');
+            && $this->registerHook('actionFrontControllerInitAfter');
     }
 
     public function uninstall()
