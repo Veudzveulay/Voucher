@@ -43,6 +43,7 @@ class arpa3voucher extends Module
         $this->version = '1.0.2';
         $this->author = 'Arpa3';
         $this->need_instance = 0;
+        $this->ps_versions_compliancy = ['min' => '1.7.0.0', 'max' => '8.99.99'];
 
         /*
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
@@ -54,9 +55,10 @@ class arpa3voucher extends Module
         $this->displayName = $this->l('arpa3voucher');
         $this->description = $this->l('Promotions paniers Arpa3');
         $this->confirmUninstall = $this->l('Confirmer supression module ?');
-        $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
 
-        $this->registerHook('actionFrontControllerAfterInit');
+        if (!Configuration::get('MYMODULE_NAME')) {
+            $this->warning = $this->trans('No name provided.', [], 'Modules.Mymodule.Admin');
+        }
     }
 
     /**
