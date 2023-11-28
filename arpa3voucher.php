@@ -71,7 +71,7 @@ class arpa3voucher extends Module
 
         return parent::install()
             && $this->registerHook('displayHeader')
-            && $this->registerHook('backOfficeHeader')
+            && $this->registerHook('displayBackOfficeHeader')
             && $this->registerHook('actionCartSave')
             && $this->registerHook('actionValidateOrder')
             && $this->registerHook('actionFrontControllerInitAfter');
@@ -262,7 +262,7 @@ class arpa3voucher extends Module
             $delete = new Product($giftproduct);
             $delete->delete();
             // Suppréssion de la promotion
-            Db::getInstance()->executeS('DELETE FROM `' . _DB_PREFIX_ . 'arpa3voucher` where id=' . $rowid);
+            Db::getInstance()->delete('arpa3voucher', 'id =' . $rowid);
             // Rafraichissement de la page
             Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
         }
